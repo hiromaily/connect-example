@@ -54,6 +54,9 @@ build-client:
 #-------------------------------------
 # HTTP
 #-------------------------------------
+# Note: POST is used as default when `--data` or `-d` option is used
+# :method post
+# :path /<Package>.<Service>/<Method>
 .PHONY:req-greet
 req-greet:
 	curl \

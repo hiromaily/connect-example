@@ -29,13 +29,18 @@ func (s *GreetServer) Greet(
 }
 
 func main() {
-	greeter := &GreetServer{}
 	mux := http.NewServeMux()
-	path, handler := greetv1connect.NewGreetServiceHandler(greeter)
-	mux.Handle(path, handler)
+	createHandlers(mux)
+
+	// serve
 	http.ListenAndServe(
 		"localhost:8080",
-		// Use h2c so we can serve HTTP/2 without TLS.
+		// h2c protocol is the non-TLS version of HTTP/2
 		h2c.NewHandler(mux, &http2.Server{}),
 	)
+}
+
+func createHandlers(mux *http.ServeMux) {
+	// params: path, handler
+	mux.Handle(greetv1connect.NewGreetServiceHandler(&GreetServer{}))
 }

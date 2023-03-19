@@ -5,5 +5,8 @@
 # Output of the go coverage tool, specifically when used with LiteIDE
 *.out
 
+# Web directory
+web/node_modules
+
 # Others
 protoset

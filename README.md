@@ -4,6 +4,7 @@ Example for go-connect and connect-web
 - [Connect Docs](https://connect.build/docs/introduction)
 - [connect-go](https://github.com/bufbuild/connect-go)
 - [connect-web](https://www.npmjs.com/package/@bufbuild/connect-web)
+  - [connect-es](https://github.com/bufbuild/connect-es)
 - [Buf Docs](https://docs.buf.build/installation)
 - [buf](https://github.com/bufbuild/buf)
 - [grpc/grpc-web](https://github.com/grpc/grpc-web)
@@ -21,3 +22,8 @@ Example for go-connect and connect-web
 - HTTP/1.1 または HTTP/2 で動作するシンプルな POST 専用プロトコル
 - ストリーミングを含む gRPC と gRPC-Web の最良の部分を取り、それらをブラウザー、モノリス、およびマイクロサービスで同等に機能するプロトコルにパッケージ化したもの
 - デフォルトでは、JSON およびバイナリでエンコードされた Protobuf がサポートされている
+
+## Front-end
+[connect-web](./web/README)
+
+- [ts-proto](https://github.com/stephenh/ts-proto) is used to generate types from proto files

@@ -1,0 +1,13 @@
+{
+  "name": "conect-web",
+  "version": "1.0.0",
+  "description": "connect-go client by ts",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "hiromaily",
+  "license": "MIT",
+  "dependencies": {
+    "ts-proto": "^1.142.1"
+  }
+}

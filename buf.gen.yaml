@@ -6,3 +6,7 @@ plugins:
   - name: connect-go
     out: pkg/gen
     opt: paths=source_relative
+  - name: ts
+    out: ./web/src/gen
+    strategy: all
+    path: ./web/node_modules/ts-proto/protoc-gen-ts_proto
