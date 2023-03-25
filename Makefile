@@ -82,3 +82,4 @@ req-grpc-greet:
 .PHONY:clean
 clean:
 	rm -rf pkg/gen
+	make -C web/ clean

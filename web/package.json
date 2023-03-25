@@ -9,6 +9,7 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@bufbuild/connect": "^0.8.4",
     "@bufbuild/connect-web": "^0.8.4",
     "@bufbuild/protobuf": "^1.2.0",
     "next": "13.2.4",
@@ -17,6 +18,8 @@
     "ts-proto": "^1.143.0"
   },
   "devDependencies": {
+    "@bufbuild/protoc-gen-connect-es": "^0.8.4",
+    "@bufbuild/protoc-gen-connect-web": "^0.8.4",
     "@types/node": "18.15.9",
     "@types/react": "18.0.29",
     "@types/react-dom": "18.0.11",
