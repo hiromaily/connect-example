@@ -31,11 +31,11 @@ buf-gen:
 #------------------------------------------------------------------------------
 .PHONY:run-server
 run-server:
-	go run ./cmd/server/main.go
+	go run ./cmd/server/*.go
 
 .PHONY:build-server
 build-server:
-	go build -v -o ${GOPATH}/bin/connect-server ./cmd/server/main.go
+	go build -v -o ${GOPATH}/bin/connect-server ./cmd/server/*.go
 
 .PHONY:exec-server
 exec-server:

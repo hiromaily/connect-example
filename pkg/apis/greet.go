@@ -3,7 +3,7 @@ package apis
 import (
 	"context"
 	"fmt"
-	"log"
+	"github.com/hiromaily/connect-example/pkg/logger"
 	"net/http"
 
 	"github.com/bufbuild/connect-go"
@@ -12,17 +12,23 @@ import (
 	"github.com/hiromaily/connect-example/pkg/gen/greet/v1/greetv1connect"
 )
 
-type GreetServer struct{}
-
-func NewGreetHandler() (string, http.Handler) {
-	return greetv1connect.NewGreetServiceHandler(&GreetServer{})
+type GreetServer struct {
+	logger logger.Logger
 }
 
-func (s *GreetServer) Greet(
+func NewGreetHandler(logger logger.Logger) (string, http.Handler) {
+	return greetv1connect.NewGreetServiceHandler(&GreetServer{
+		logger: logger,
+	})
+}
+
+func (g *GreetServer) Greet(
 	ctx context.Context,
 	req *connect.Request[greetv1.GreetRequest],
 ) (*connect.Response[greetv1.GreetResponse], error) {
-	log.Println("Request headers: ", req.Header())
+	g.logger.Info("Greet()")
+	g.logger.Debug(fmt.Sprintf("Request headers: %v", req.Header()))
+
 	res := connect.NewResponse(&greetv1.GreetResponse{
 		Greeting: fmt.Sprintf("Hello, %s!", req.Msg.Name),
 	})

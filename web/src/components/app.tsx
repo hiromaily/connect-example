@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { GreetService } from "../gen/greet/v1/greet_connect";
-import {useClient} from "../libs/client";
+import { useClient } from "../libs/client";
 
 // https://github.com/depot/sdk-node/blob/7c1bc12a70b415111abd25fd7695ab37f03685b8/src/index.ts
 

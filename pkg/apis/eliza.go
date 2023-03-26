@@ -4,6 +4,7 @@ import (
 	"context"
 	"errors"
 	"fmt"
+	"github.com/hiromaily/connect-example/pkg/logger"
 	"io"
 	"net/http"
 	"time"
@@ -20,16 +21,21 @@ import (
 type ElizaServer struct {
 	// The time to sleep between sending responses on a stream
 	streamDelay time.Duration
+	logger      logger.Logger
 }
 
-func NewElizaHandler() (string, http.Handler) {
-	return elizav1connect.NewElizaServiceHandler(&ElizaServer{})
+func NewElizaHandler(logger logger.Logger) (string, http.Handler) {
+	return elizav1connect.NewElizaServiceHandler(&ElizaServer{
+		logger: logger,
+	})
 }
 
 func (e *ElizaServer) Say(
 	ctx context.Context,
 	req *connect.Request[elizav1.SayRequest],
 ) (*connect.Response[elizav1.SayResponse], error) {
+	e.logger.Info("Say()")
+
 	//reply, _ := eliza.Reply(req.Msg.Sentence) // ignore end-of-conversation detection
 	reply := fmt.Sprintf("You said, %s!", req.Msg.Sentence)
 	return connect.NewResponse(&elizav1.SayResponse{
@@ -41,6 +47,8 @@ func (e *ElizaServer) Converse(
 	ctx context.Context,
 	stream *connect.BidiStream[elizav1.ConverseRequest, elizav1.ConverseResponse],
 ) error {
+	e.logger.Info("Converse()")
+
 	for {
 		if err := ctx.Err(); err != nil {
 			return err
@@ -64,6 +72,8 @@ func (e *ElizaServer) Introduce(
 	req *connect.Request[elizav1.IntroduceRequest],
 	stream *connect.ServerStream[elizav1.IntroduceResponse],
 ) error {
+	e.logger.Info("Introduce()")
+
 	name := req.Msg.Name
 	if name == "" {
 		name = "Anonymous User"

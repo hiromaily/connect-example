@@ -2,7 +2,9 @@
 Example for go-connect and connect-web
 
 ## Environment Variables
-
+| Variables | Explanation        |
+|-----------|--------------------|
+| PORT      | gRPC server port   |
 
 
 ## Front-end
@@ -13,6 +15,7 @@ Example for go-connect and connect-web
 - [protoc-gen-go](https://pkg.go.dev/google.golang.org/protobuf)
 - [protoc-gen-connect-go](https://github.com/bufbuild/connect-go/tree/main/cmd/protoc-gen-connect-go)
 ### For ES
+- [protoc-gen-es](https://www.npmjs.com/package/@bufbuild/protoc-gen-es)
 - [protoc-gen-connect-web](https://github.com/bufbuild/connect-es/tree/main/packages/protoc-gen-connect-web) Deprecated
 - [protoc-gen-connect-es](https://github.com/bufbuild/connect-es/tree/main/packages/protoc-gen-connect-es)
 
