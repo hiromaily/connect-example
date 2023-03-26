@@ -14,9 +14,10 @@ const App = () => {
         <form onSubmit={async (e) => {
             e.preventDefault();
             // @ts-ignore
-            await client.greet({
+            const res = await client.greet({
                 name: inputValue,
             });
+            console.log(res);
         }}>
             <input value={inputValue} onChange={e => setInputValue(e.target.value)} />
             <button type="submit">Send</button>
