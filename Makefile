@@ -1,3 +1,4 @@
+GOLANGCI_VERSION=v1.51.2
 
 .PHONY:tools
 tools:
@@ -5,6 +6,7 @@ tools:
 	go install github.com/fullstorydev/grpcurl/cmd/grpcurl@latest
 	go install google.golang.org/protobuf/cmd/protoc-gen-go@latest
 	go install github.com/bufbuild/connect-go/cmd/protoc-gen-connect-go@latest
+	go install github.com/golangci/golangci-lint/cmd/golangci-lint@$(GOLANGCI_VERSION)
 
 #------------------------------------------------------------------------------
 # proto using buf
@@ -40,6 +42,18 @@ build-server:
 .PHONY:exec-server
 exec-server:
 	connect-server
+
+#------------------------------------------------------------------------------
+# linter for server
+#------------------------------------------------------------------------------
+.PHONY: lint
+lint:
+	golangci-lint run
+
+# Bug: format doesn't work on files which has tags
+.PHONY: lint-fix
+lint-fix:
+	golangci-lint run --fix
 
 #------------------------------------------------------------------------------
 # go client

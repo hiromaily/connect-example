@@ -74,10 +74,10 @@ func (e *ElizaServer) Introduce(
 ) error {
 	e.logger.Info("Introduce()")
 
-	name := req.Msg.Name
-	if name == "" {
-		name = "Anonymous User"
-	}
+	//name := req.Msg.Name
+	//if name == "" {
+	//	name = "Anonymous User"
+	//}
 	//intros := eliza.GetIntroResponses(name)
 	intros := []string{"Hello", "Goodbye", "How are you"}
 	var ticker *time.Ticker

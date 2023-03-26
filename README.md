@@ -2,13 +2,13 @@
 Example for go-connect and connect-web
 
 ## Environment Variables
-| Variables | Explanation        |
-|-----------|--------------------|
-| PORT      | gRPC server port   |
+| Variables | Explanation        | Default |
+|-----------|--------------------| ------- |
+| PORT      | gRPC server port   | 8080    |
 
 
 ## Front-end
-[README](./web/README)
+[README](./web/README.md)
 
 ## Generator
 ### For Golang

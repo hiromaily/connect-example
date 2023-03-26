@@ -38,7 +38,6 @@ func (r *registory) NewServer() *http.Server {
 	if port := os.Getenv("PORT"); port != "" {
 		addr = ":" + port
 	}
-
 	return &http.Server{
 		Addr: addr,
 		Handler: h2c.NewHandler(

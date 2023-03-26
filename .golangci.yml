@@ -1,0 +1,38 @@
+run:
+  deadline: 10m
+  build-tags:
+    - integration
+  skip-dirs:
+    - proto
+    - web
+
+linters-settings:
+  goimports:
+    # put imports beginning with prefix after 3rd-party packages;
+    # it's a comma-separated list of prefixes
+    local-prefixes: github.com/hiromaily
+  misspell:
+    locale: US
+  revive:
+    # see https://golangci-lint.run/usage/linters/#revive
+    # see https://github.com/mgechev/revive#available-rules for details.
+    ignore-generated-header: true
+    severity: warning
+    confidence: 0.8
+    rules:
+      - name: indent-error-flow
+        severity: warning
+  gci:
+    sections:
+      - standard
+      - default
+      - prefix(github.com/hiromaily)
+
+#issues:
+#  exclude:
+#    - type name will be used
+#    - "HeaderMap is deprecated: HeaderMap exists"
+#  exclude-use-default: false
+
+# Use default
+#linters:
