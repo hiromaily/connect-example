@@ -5,11 +5,13 @@ import (
 	"errors"
 	"fmt"
 	"io"
+	"net/http"
 	"time"
 
 	"github.com/bufbuild/connect-go"
 
 	elizav1 "github.com/hiromaily/connect-example/pkg/gen/eliza/v1"
+	"github.com/hiromaily/connect-example/pkg/gen/eliza/v1/elizav1connect"
 )
 
 // Refer to
@@ -18,6 +20,10 @@ import (
 type ElizaServer struct {
 	// The time to sleep between sending responses on a stream
 	streamDelay time.Duration
+}
+
+func NewElizaHandler() (string, http.Handler) {
+	return elizav1connect.NewElizaServiceHandler(&ElizaServer{})
 }
 
 func (e *ElizaServer) Say(

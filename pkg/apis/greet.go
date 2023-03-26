@@ -4,15 +4,20 @@ import (
 	"context"
 	"fmt"
 	"log"
+	"net/http"
 
 	"github.com/bufbuild/connect-go"
 
 	greetv1 "github.com/hiromaily/connect-example/pkg/gen/greet/v1"
+	"github.com/hiromaily/connect-example/pkg/gen/greet/v1/greetv1connect"
 )
 
 type GreetServer struct{}
 
-// TODO: move somewhere
+func NewGreetHandler() (string, http.Handler) {
+	return greetv1connect.NewGreetServiceHandler(&GreetServer{})
+}
+
 func (s *GreetServer) Greet(
 	ctx context.Context,
 	req *connect.Request[greetv1.GreetRequest],

@@ -20,9 +20,15 @@ plugins:
      #- target=js+dts
      - import_extension=none
     path: ./web/node_modules/.bin/protoc-gen-es
-  - name: connect-web
+#  - name: connect-web
+#    out: ./web/src/gen
+#    opt:
+#     - target=ts
+#     - import_extension=none
+#    path: ./web/node_modules/.bin/protoc-gen-connect-web
+  - name: connect-es
     out: ./web/src/gen
     opt:
-     - target=ts
-     - import_extension=none
-    path: ./web/node_modules/.bin/protoc-gen-connect-web
+      - target=ts
+      - import_extension=none
+    path: ./web/node_modules/.bin/protoc-gen-connect-es
