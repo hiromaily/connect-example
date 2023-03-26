@@ -1,5 +1,5 @@
 # connect-example
-Example for go-connect and connect-web
+Example for go-connect server and connect-web client
 
 ## Environment Variables
 | Variables | Explanation        | Default |
@@ -16,7 +16,7 @@ Example for go-connect and connect-web
 - [protoc-gen-connect-go](https://github.com/bufbuild/connect-go/tree/main/cmd/protoc-gen-connect-go)
 ### For ES
 - [protoc-gen-es](https://www.npmjs.com/package/@bufbuild/protoc-gen-es)
-- [protoc-gen-connect-web](https://github.com/bufbuild/connect-es/tree/main/packages/protoc-gen-connect-web) Deprecated
+- [protoc-gen-connect-web](https://github.com/bufbuild/connect-es/tree/main/packages/protoc-gen-connect-web) [Deprecated]
 - [protoc-gen-connect-es](https://github.com/bufbuild/connect-es/tree/main/packages/protoc-gen-connect-es)
 
 ## Rererences
