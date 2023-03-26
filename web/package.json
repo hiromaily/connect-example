@@ -20,6 +20,7 @@
   "devDependencies": {
     "@bufbuild/protoc-gen-connect-es": "^0.8.4",
     "@bufbuild/protoc-gen-connect-web": "^0.8.4",
+    "@bufbuild/protoc-gen-es": "^1.2.0",
     "@types/node": "18.15.9",
     "@types/react": "18.0.29",
     "@types/react-dom": "18.0.11",
