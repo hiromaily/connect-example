@@ -1,4 +1,4 @@
-import { useState } from "react";
+import {FormEvent, useState} from "react";
 import { GreetService } from "../gen/greet/v1/greet_connect";
 import { useClient } from "../libs/client";
 
@@ -6,21 +6,27 @@ import { useClient } from "../libs/client";
 
 const App = () => {
     const [inputValue, setInputValue] = useState("");
+    const [response, setResponse] = useState("");
     // @ts-ignore
     const client = useClient(GreetService);
 
+    const onSubmit = async (e: FormEvent<HTMLFormElement>) => {
+        e.preventDefault();
+        // @ts-ignore
+        const res = await client.greet({
+            name: inputValue,
+        });
+        setResponse(res.greeting)
+        console.log(res);
+    }
+
     return <>
-        <form onSubmit={async (e) => {
-            e.preventDefault();
-            // @ts-ignore
-            const res = await client.greet({
-                name: inputValue,
-            });
-            console.log(res);
-        }}>
+        <p>Say, something</p>
+        <form onSubmit={onSubmit}>
             <input value={inputValue} onChange={e => setInputValue(e.target.value)} />
             <button type="submit">Send</button>
         </form>
+        <p>Response:<span>{response}</span></p>
     </>;
 }
 
