@@ -4,6 +4,9 @@
 npx create-next-app connect-app --ts --use-npm
 ```
 
+## Requirements
+- Node: 16+
+
 ## Dependencies
 - ~~[grpc-web](https://github.com/grpc/grpc-web)~~
 - [connect-web](https://www.npmjs.com/package/@bufbuild/connect-web)
