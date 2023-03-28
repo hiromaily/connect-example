@@ -1,6 +1,7 @@
 package main
 
 import (
+	"github.com/hiromaily/connect-example/pkg/server"
 	"net/http"
 	"os"
 	"time"
@@ -14,8 +15,7 @@ import (
 )
 
 type Registry interface {
-	NewServer() *http.Server
-	NewLogger() logger.Logger
+	NewServer() server.Server
 }
 
 type registory struct {
@@ -26,19 +26,31 @@ type registory struct {
 func NewRegistory() Registry {
 	reg := &registory{}
 	reg.mux = http.NewServeMux()
-	reg.NewLogger()
+	reg.newLogger()
 
 	return reg
 }
 
-func (r *registory) NewServer() *http.Server {
+func (r *registory) NewServer() server.Server {
+	// switch server by DI
+	return r.newConnectServer()
+}
+
+func (r *registory) newLogger() logger.Logger {
+	if r.logger == nil {
+		r.logger = logger.NewZeroLog()
+	}
+	return r.logger
+}
+
+func (r *registory) newConnectServer() server.Server {
 	r.createHandlers()
 
 	addr := "localhost:8080"
 	if port := os.Getenv("PORT"); port != "" {
 		addr = ":" + port
 	}
-	return &http.Server{
+	srv := &http.Server{
 		Addr: addr,
 		Handler: h2c.NewHandler(
 			cors.NewCORS().Handler(r.mux),
@@ -49,17 +61,12 @@ func (r *registory) NewServer() *http.Server {
 		WriteTimeout:      5 * time.Minute,
 		MaxHeaderBytes:    8 * 1024, // 8KiB
 	}
-}
 
-func (r *registory) NewLogger() logger.Logger {
-	if r.logger == nil {
-		r.logger = logger.NewZeroLog()
-	}
-	return r.logger
+	return server.NewServer(srv, r.newLogger())
 }
 
 func (r *registory) createHandlers() {
 	// params: path, handler
-	r.mux.Handle(apis.NewGreetHandler(r.NewLogger()))
-	r.mux.Handle(apis.NewElizaHandler(r.NewLogger()))
+	r.mux.Handle(apis.NewGreetHandler(r.newLogger()))
+	r.mux.Handle(apis.NewElizaHandler(r.newLogger()))
 }
