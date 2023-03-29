@@ -4,21 +4,25 @@ import (
 	"fmt"
 
 	"github.com/hiromaily/connect-example/pkg/logger"
+	"github.com/hiromaily/connect-example/pkg/repositories"
 )
 
 type Eliza struct {
-	logger logger.Logger
+	logger    logger.Logger
+	elizaRepo repositories.ElizaTableRepo
 }
 
-func NewUseCaseEliza(logger logger.Logger) *Eliza {
+func NewUseCaseEliza(logger logger.Logger, elizaRepo repositories.ElizaTableRepo) *Eliza {
 	return &Eliza{
-		logger: logger,
+		logger:    logger,
+		elizaRepo: elizaRepo,
 	}
 }
 
 // Say returns words
 func (e *Eliza) Say(sentence string) string {
-	return fmt.Sprintf("You said, %s!", sentence)
+	word := e.elizaRepo.GetEliza()
+	return fmt.Sprintf("%s, %s!", word, sentence)
 }
 
 func (e *Eliza) GetIntros(name string) []string {

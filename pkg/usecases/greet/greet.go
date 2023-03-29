@@ -4,19 +4,23 @@ import (
 	"fmt"
 
 	"github.com/hiromaily/connect-example/pkg/logger"
+	"github.com/hiromaily/connect-example/pkg/repositories"
 )
 
 type Greet struct {
-	logger logger.Logger
+	logger    logger.Logger
+	greetRepo repositories.GreetTableRepo
 }
 
-func NewUseCaseGreet(logger logger.Logger) *Greet {
+func NewUseCaseGreet(logger logger.Logger, greetRepo repositories.GreetTableRepo) *Greet {
 	return &Greet{
-		logger: logger,
+		logger:    logger,
+		greetRepo: greetRepo,
 	}
 }
 
 // Greet returns reply
 func (g *Greet) Greet(name string) string {
-	return fmt.Sprintf("Hello, %s!", name)
+	greet := g.greetRepo.GetGreet()
+	return fmt.Sprintf("%s, %s!", greet, name)
 }
