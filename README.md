@@ -1,5 +1,9 @@
 # connect-example
-Example for go-connect server and connect-web client
+Example for go-connect server and connect-web client.
+
+This program follows a `Clean Architecture` as much as I can.
+
+<img src="https://raw.githubusercontent.com/hiromaily/documents/main/images/clean-architecture3.png"  width="50%" height="50%">
 
 ## Environment Variables
 | Variables | Explanation      | Default           |
