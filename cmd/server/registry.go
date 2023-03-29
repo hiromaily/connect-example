@@ -8,11 +8,11 @@ import (
 	"golang.org/x/net/http2"
 	"golang.org/x/net/http2/h2c"
 
-	"github.com/hiromaily/connect-example/pkg/apis/connect"
 	"github.com/hiromaily/connect-example/pkg/logger"
 	"github.com/hiromaily/connect-example/pkg/repositories"
 	"github.com/hiromaily/connect-example/pkg/server"
 	"github.com/hiromaily/connect-example/pkg/server/cors"
+	connect2 "github.com/hiromaily/connect-example/pkg/server/handlers/connect"
 	"github.com/hiromaily/connect-example/pkg/storages/mock"
 	"github.com/hiromaily/connect-example/pkg/usecases/eliza"
 	"github.com/hiromaily/connect-example/pkg/usecases/greet"
@@ -106,6 +106,6 @@ func (r *registory) newConnectServer() server.Server {
 
 func (r *registory) createConnectHandlers() {
 	// params: path, handler
-	r.mux.Handle(connect.NewGreetHandler(r.newLogger(), r.newUseCaseGreet()))
-	r.mux.Handle(connect.NewElizaHandler(r.newLogger(), r.newUseCaseEliza()))
+	r.mux.Handle(connect2.NewGreetHandler(r.newLogger(), r.newUseCaseGreet()))
+	r.mux.Handle(connect2.NewElizaHandler(r.newLogger(), r.newUseCaseEliza()))
 }

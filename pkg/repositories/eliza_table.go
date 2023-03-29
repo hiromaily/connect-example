@@ -5,13 +5,15 @@ import (
 	"github.com/hiromaily/connect-example/pkg/storages"
 )
 
-// repositories are Interface Adapter for Database gateway
+// repositories has Interface and Interface Adapter as impl for Database gateway
 
+// ElizaTableRepo is Interface
 type ElizaTableRepo interface {
 	GetEliza() string
 	PutEliza(name string) error
 }
 
+// Impl
 type elizaTableRepo struct {
 	logger        logger.Logger
 	elizaStorager storages.ElizaStorager

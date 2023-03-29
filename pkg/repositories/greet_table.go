@@ -5,13 +5,15 @@ import (
 	"github.com/hiromaily/connect-example/pkg/storages"
 )
 
-// repositories are Interface Adapter for Database gateway
+// repositories has Interface and Interface Adapter as impl for Database gateway
 
+// GreetTableRepo is Interface
 type GreetTableRepo interface {
 	GetGreet() string
 	PutGreet(name string) error
 }
 
+// Impl
 type greetTableRepo struct {
 	logger        logger.Logger
 	greetStorager storages.GreetStorager

@@ -19,25 +19,24 @@ import (
 // Refer to
 // https://github.com/bufbuild/connect-demo/blob/3a30d4de07d6ac42110acd4ebf64bb4bf8a62579/main.go
 
-type ElizaServer struct {
+type ElizaHandler struct {
 	// The time to sleep between sending responses on a stream
 	streamDelay time.Duration
 	logger      logger.Logger
 	ucEliza     *eliza.Eliza
 }
 
-func NewElizaServer(logger logger.Logger, ucEliza *eliza.Eliza) *ElizaServer {
-	return &ElizaServer{
+// NewElizaHandler returns eliza handler
+// Handler is Controllers as Interface Adapters in Clean Architecture
+func NewElizaHandler(logger logger.Logger, ucEliza *eliza.Eliza) (string, http.Handler) {
+	handler := &ElizaHandler{
 		logger:  logger,
 		ucEliza: ucEliza,
 	}
+	return elizav1connect.NewElizaServiceHandler(handler)
 }
 
-func NewElizaHandler(logger logger.Logger, ucEliza *eliza.Eliza) (string, http.Handler) {
-	return elizav1connect.NewElizaServiceHandler(NewElizaServer(logger, ucEliza))
-}
-
-func (e *ElizaServer) Say(
+func (e *ElizaHandler) Say(
 	ctx context.Context,
 	req *connect.Request[elizav1.SayRequest],
 ) (*connect.Response[elizav1.SayResponse], error) {
@@ -53,7 +52,7 @@ func (e *ElizaServer) Say(
 }
 
 // Converse is bi-directional streaming request
-func (e *ElizaServer) Converse(
+func (e *ElizaHandler) Converse(
 	ctx context.Context,
 	stream *connect.BidiStream[elizav1.ConverseRequest, elizav1.ConverseResponse],
 ) error {
@@ -81,7 +80,7 @@ func (e *ElizaServer) Converse(
 }
 
 // Introduce is server-streaming request
-func (e *ElizaServer) Introduce(
+func (e *ElizaHandler) Introduce(
 	ctx context.Context,
 	req *connect.Request[elizav1.IntroduceRequest],
 	stream *connect.ServerStream[elizav1.IntroduceResponse],

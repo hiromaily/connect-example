@@ -13,23 +13,22 @@ import (
 	"github.com/hiromaily/connect-example/pkg/usecases/greet"
 )
 
-type GreetServer struct {
+type GreetHandler struct {
 	logger  logger.Logger
 	ucGreet *greet.Greet
 }
 
-func NewGreetServer(logger logger.Logger, ucGreet *greet.Greet) *GreetServer {
-	return &GreetServer{
+// NewGreetHandler returns greet handler
+// Handler is Controllers as Interface Adapters in Clean Architecture
+func NewGreetHandler(logger logger.Logger, ucGreet *greet.Greet) (string, http.Handler) {
+	handler := &GreetHandler{
 		logger:  logger,
 		ucGreet: ucGreet,
 	}
+	return greetv1connect.NewGreetServiceHandler(handler)
 }
 
-func NewGreetHandler(logger logger.Logger, ucGreet *greet.Greet) (string, http.Handler) {
-	return greetv1connect.NewGreetServiceHandler(NewGreetServer(logger, ucGreet))
-}
-
-func (g *GreetServer) Greet(
+func (g *GreetHandler) Greet(
 	ctx context.Context,
 	req *connect.Request[greetv1.GreetRequest],
 ) (*connect.Response[greetv1.GreetResponse], error) {
