@@ -2,9 +2,10 @@
 Example for go-connect server and connect-web client
 
 ## Environment Variables
-| Variables | Explanation        | Default |
-|-----------|--------------------| ------- |
-| PORT      | gRPC server port   | 8080    |
+| Variables | Explanation      | Default           |
+|-----------|------------------|-------------------|
+| PORT      | gRPC server port | 8080              |
+| CONF      | config file path | ./config/dev.toml |
 
 
 ## Front-end

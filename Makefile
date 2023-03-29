@@ -47,13 +47,17 @@ exec-server:
 # linter for server
 #------------------------------------------------------------------------------
 .PHONY: lint
-lint:
+lint: import
 	golangci-lint run
 
 # Bug: format doesn't work on files which has tags
 .PHONY: lint-fix
-lint-fix:
+lint-fix: import
 	golangci-lint run --fix
+
+.PHONY: import
+import:
+	./scripts/imports.sh
 
 #------------------------------------------------------------------------------
 # go client

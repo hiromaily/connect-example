@@ -3,23 +3,27 @@ package apis
 import (
 	"context"
 	"fmt"
-	"github.com/hiromaily/connect-example/pkg/logger"
 	"net/http"
 
 	"github.com/bufbuild/connect-go"
 
 	greetv1 "github.com/hiromaily/connect-example/pkg/gen/greet/v1"
 	"github.com/hiromaily/connect-example/pkg/gen/greet/v1/greetv1connect"
+	"github.com/hiromaily/connect-example/pkg/logger"
 )
 
 type GreetServer struct {
 	logger logger.Logger
 }
 
-func NewGreetHandler(logger logger.Logger) (string, http.Handler) {
-	return greetv1connect.NewGreetServiceHandler(&GreetServer{
+func NewGreetServer(logger logger.Logger) *GreetServer {
+	return &GreetServer{
 		logger: logger,
-	})
+	}
+}
+
+func NewGreetHandler(logger logger.Logger) (string, http.Handler) {
+	return greetv1connect.NewGreetServiceHandler(NewGreetServer(logger))
 }
 
 func (g *GreetServer) Greet(

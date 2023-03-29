@@ -1,7 +1,6 @@
 package main
 
 import (
-	"github.com/hiromaily/connect-example/pkg/server"
 	"net/http"
 	"os"
 	"time"
@@ -11,6 +10,7 @@ import (
 
 	"github.com/hiromaily/connect-example/pkg/apis"
 	"github.com/hiromaily/connect-example/pkg/logger"
+	"github.com/hiromaily/connect-example/pkg/server"
 	"github.com/hiromaily/connect-example/pkg/server/cors"
 )
 

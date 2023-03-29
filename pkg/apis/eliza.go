@@ -4,7 +4,6 @@ import (
 	"context"
 	"errors"
 	"fmt"
-	"github.com/hiromaily/connect-example/pkg/logger"
 	"io"
 	"net/http"
 	"time"
@@ -13,6 +12,7 @@ import (
 
 	elizav1 "github.com/hiromaily/connect-example/pkg/gen/eliza/v1"
 	"github.com/hiromaily/connect-example/pkg/gen/eliza/v1/elizav1connect"
+	"github.com/hiromaily/connect-example/pkg/logger"
 )
 
 // Refer to
@@ -24,10 +24,14 @@ type ElizaServer struct {
 	logger      logger.Logger
 }
 
-func NewElizaHandler(logger logger.Logger) (string, http.Handler) {
-	return elizav1connect.NewElizaServiceHandler(&ElizaServer{
+func NewElizaServer(logger logger.Logger) *ElizaServer {
+	return &ElizaServer{
 		logger: logger,
-	})
+	}
+}
+
+func NewElizaHandler(logger logger.Logger) (string, http.Handler) {
+	return elizav1connect.NewElizaServiceHandler(NewElizaServer(logger))
 }
 
 func (e *ElizaServer) Say(
