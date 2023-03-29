@@ -1,4 +1,4 @@
-package apis
+package connect
 
 import (
 	"context"
@@ -10,20 +10,23 @@ import (
 	greetv1 "github.com/hiromaily/connect-example/pkg/gen/greet/v1"
 	"github.com/hiromaily/connect-example/pkg/gen/greet/v1/greetv1connect"
 	"github.com/hiromaily/connect-example/pkg/logger"
+	"github.com/hiromaily/connect-example/pkg/usecases/greet"
 )
 
 type GreetServer struct {
-	logger logger.Logger
+	logger  logger.Logger
+	ucGreet *greet.Greet
 }
 
-func NewGreetServer(logger logger.Logger) *GreetServer {
+func NewGreetServer(logger logger.Logger, ucGreet *greet.Greet) *GreetServer {
 	return &GreetServer{
-		logger: logger,
+		logger:  logger,
+		ucGreet: ucGreet,
 	}
 }
 
-func NewGreetHandler(logger logger.Logger) (string, http.Handler) {
-	return greetv1connect.NewGreetServiceHandler(NewGreetServer(logger))
+func NewGreetHandler(logger logger.Logger, ucGreet *greet.Greet) (string, http.Handler) {
+	return greetv1connect.NewGreetServiceHandler(NewGreetServer(logger, ucGreet))
 }
 
 func (g *GreetServer) Greet(
@@ -33,8 +36,12 @@ func (g *GreetServer) Greet(
 	g.logger.Info("Greet()")
 	g.logger.Debug(fmt.Sprintf("Request headers: %v", req.Header()))
 
+	// usecase
+	reply := g.ucGreet.Greet(req.Msg.Name)
+
+	// create response
 	res := connect.NewResponse(&greetv1.GreetResponse{
-		Greeting: fmt.Sprintf("Hello, %s!", req.Msg.Name),
+		Greeting: reply,
 	})
 	res.Header().Set("Greet-Version", "v1")
 	return res, nil

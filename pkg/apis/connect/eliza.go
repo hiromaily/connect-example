@@ -1,4 +1,4 @@
-package apis
+package connect
 
 import (
 	"context"
@@ -13,6 +13,7 @@ import (
 	elizav1 "github.com/hiromaily/connect-example/pkg/gen/eliza/v1"
 	"github.com/hiromaily/connect-example/pkg/gen/eliza/v1/elizav1connect"
 	"github.com/hiromaily/connect-example/pkg/logger"
+	"github.com/hiromaily/connect-example/pkg/usecases/eliza"
 )
 
 // Refer to
@@ -22,16 +23,18 @@ type ElizaServer struct {
 	// The time to sleep between sending responses on a stream
 	streamDelay time.Duration
 	logger      logger.Logger
+	ucEliza     *eliza.Eliza
 }
 
-func NewElizaServer(logger logger.Logger) *ElizaServer {
+func NewElizaServer(logger logger.Logger, ucEliza *eliza.Eliza) *ElizaServer {
 	return &ElizaServer{
-		logger: logger,
+		logger:  logger,
+		ucEliza: ucEliza,
 	}
 }
 
-func NewElizaHandler(logger logger.Logger) (string, http.Handler) {
-	return elizav1connect.NewElizaServiceHandler(NewElizaServer(logger))
+func NewElizaHandler(logger logger.Logger, ucEliza *eliza.Eliza) (string, http.Handler) {
+	return elizav1connect.NewElizaServiceHandler(NewElizaServer(logger, ucEliza))
 }
 
 func (e *ElizaServer) Say(
@@ -40,13 +43,16 @@ func (e *ElizaServer) Say(
 ) (*connect.Response[elizav1.SayResponse], error) {
 	e.logger.Info("Say()")
 
-	//reply, _ := eliza.Reply(req.Msg.Sentence) // ignore end-of-conversation detection
-	reply := fmt.Sprintf("You said, %s!", req.Msg.Sentence)
+	// usecase
+	reply := e.ucEliza.Say(req.Msg.Sentence)
+
+	// create response
 	return connect.NewResponse(&elizav1.SayResponse{
 		Sentence: reply,
 	}), nil
 }
 
+// Converse is bi-directional streaming request
 func (e *ElizaServer) Converse(
 	ctx context.Context,
 	stream *connect.BidiStream[elizav1.ConverseRequest, elizav1.ConverseResponse],
@@ -63,14 +69,18 @@ func (e *ElizaServer) Converse(
 		} else if err != nil {
 			return fmt.Errorf("receive request: %w", err)
 		}
-		//reply, endSession := eliza.Reply(request.Sentence)
-		reply := fmt.Sprintf("You said, %s!", request.Sentence)
+
+		// usecase
+		reply := e.ucEliza.Say(request.Sentence)
+
+		// response
 		if err := stream.Send(&elizav1.ConverseResponse{Sentence: reply}); err != nil {
 			return fmt.Errorf("send response: %w", err)
 		}
 	}
 }
 
+// Introduce is server-streaming request
 func (e *ElizaServer) Introduce(
 	ctx context.Context,
 	req *connect.Request[elizav1.IntroduceRequest],
@@ -78,12 +88,15 @@ func (e *ElizaServer) Introduce(
 ) error {
 	e.logger.Info("Introduce()")
 
+	// usecase
 	//name := req.Msg.Name
 	//if name == "" {
 	//	name = "Anonymous User"
 	//}
 	//intros := eliza.GetIntroResponses(name)
-	intros := []string{"Hello", "Goodbye", "How are you"}
+	intros := e.ucEliza.GetIntros(req.Msg.Name)
+
+	// response
 	var ticker *time.Ticker
 	if e.streamDelay > 0 {
 		ticker = time.NewTicker(e.streamDelay)
