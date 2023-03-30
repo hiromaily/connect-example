@@ -8,6 +8,7 @@ tools:
 	go install github.com/bufbuild/connect-go/cmd/protoc-gen-connect-go@latest
 	go install golang.org/x/tools/cmd/goimports@latest
 	go install github.com/golangci/golangci-lint/cmd/golangci-lint@$(GOLANGCI_VERSION)
+	go install github.com/semrush/zenrpc/v2/zenrpc@latest
 
 #------------------------------------------------------------------------------
 # proto using buf
@@ -28,6 +29,14 @@ buf-lint:
 buf-gen:
 	#buf generate
 	buf generate proto
+
+#------------------------------------------------------------------------------
+# JSON-RPC
+#------------------------------------------------------------------------------
+# go install github.com/semrush/zenrpc/v2/zenrpc@latest is required
+.PHONY:go-generate
+go-generate:
+	go generate -v ./...
 
 #------------------------------------------------------------------------------
 # go server

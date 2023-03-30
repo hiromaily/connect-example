@@ -1,13 +1,12 @@
 package main
 
 import (
-	"log"
+	"github.com/hiromaily/connect-example/pkg/server/handlers/jsonrpc"
 	"net/http"
 	"os"
 	"time"
 
 	"github.com/semrush/zenrpc/v2"
-	"github.com/semrush/zenrpc/v2/testdata"
 	"golang.org/x/net/http2"
 	"golang.org/x/net/http2/h2c"
 
@@ -142,10 +141,12 @@ func (r *registory) createConnectHandlers(mux *http.ServeMux) {
 
 func (r *registory) createJSONRPCHandlers(mux *http.ServeMux) {
 	rpc := zenrpc.NewServer(zenrpc.Options{ExposeSMD: true})
-	rpc.Register("arith", testdata.ArithService{})
-	rpc.Register("", testdata.ArithService{}) // public
-	//rpc.Register("arith", jsonrpc.ArithService{})
-	rpc.Use(zenrpc.Logger(log.New(os.Stderr, "", log.LstdFlags)))
+	//rpc.Register("arith", testdata.ArithService{})
+	//rpc.Register("", testdata.ArithService{}) // public
+	rpc.Register("arith", jsonrpc.ArithService{})
+	rpc.Register("greet", jsonrpc.NewGreetService(r.newLogger(), r.newUseCaseGreet()))
+
+	//rpc.Use(zenrpc.Logger(log.New(os.Stderr, "", log.LstdFlags)))
 
 	mux.Handle("/", rpc)
 }
