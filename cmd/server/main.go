@@ -5,5 +5,7 @@ package main
 
 func main() {
 	//TODO: config file
-	NewRegistory().NewServer().Run()
+	registry := NewRegistory()
+	go registry.NewConnectServer().Run()
+	registry.NewJSONRPCServer().Run()
 }

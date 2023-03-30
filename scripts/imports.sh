@@ -6,7 +6,8 @@ for gofile in $gofiles; do
 	echo $gofile
 	sed '/^import/,/^[[:space:]]*)/ { /^[[:space:]]*$/ d; }' $gofile >tmp
 	mv tmp $gofile
+
+	goimports -local github.com/hiromaily/ -w $gofile
 done
 
-go fmt $(go list ./... | grep -v "/gen/")
-goimports -local github.com/hiromaily/ -w $(goimports -local github.com/hiromaily/ -l ./ | grep -v "/vendor/")
+echo "Done imports"

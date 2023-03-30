@@ -6,6 +6,7 @@ tools:
 	go install github.com/fullstorydev/grpcurl/cmd/grpcurl@latest
 	go install google.golang.org/protobuf/cmd/protoc-gen-go@latest
 	go install github.com/bufbuild/connect-go/cmd/protoc-gen-connect-go@latest
+	go install golang.org/x/tools/cmd/goimports@latest
 	go install github.com/golangci/golangci-lint/cmd/golangci-lint@$(GOLANGCI_VERSION)
 
 #------------------------------------------------------------------------------
@@ -47,12 +48,12 @@ exec-server:
 # linter for server
 #------------------------------------------------------------------------------
 .PHONY: lint
-lint: import
+lint:
 	golangci-lint run
 
 # Bug: format doesn't work on files which has tags
 .PHONY: lint-fix
-lint-fix: import
+lint-fix:
 	golangci-lint run --fix
 
 .PHONY: import

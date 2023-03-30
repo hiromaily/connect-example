@@ -37,7 +37,7 @@ func NewElizaHandler(logger logger.Logger, ucEliza *eliza.Eliza) (string, http.H
 }
 
 func (e *ElizaHandler) Say(
-	ctx context.Context,
+	_ context.Context,
 	req *connect.Request[elizav1.SayRequest],
 ) (*connect.Response[elizav1.SayResponse], error) {
 	e.logger.Info("Say()")

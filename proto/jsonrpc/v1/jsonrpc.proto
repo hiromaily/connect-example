@@ -1,0 +1,24 @@
+syntax = "proto3";
+
+package jsonrpc.v1;
+
+option go_package = "github.com/hiromaily/connect-example/pkg/gen/jsonrpc/v1;jsonrpcv1";
+
+import "greet/v1/greet.proto";
+
+message JSONRPCRequest {
+  string jsonrpc = 1;
+  string method = 2;
+  greet.v1.GreetRequest params = 3;
+  uint64 id = 4;
+}
+
+message JSONRPCResponse {
+  string jsonrpc = 1;
+  greet.v1.GreetResponse params = 2;
+  uint64 id = 3;
+}
+
+service JSONRPCGreetService {
+  rpc Greet(JSONRPCRequest) returns (JSONRPCResponse) {}
+}

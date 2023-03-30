@@ -7,12 +7,10 @@ package greetv1connect
 import (
 	context "context"
 	errors "errors"
+	connect_go "github.com/bufbuild/connect-go"
+	v1 "github.com/hiromaily/connect-example/pkg/gen/greet/v1"
 	http "net/http"
 	strings "strings"
-
-	connect_go "github.com/bufbuild/connect-go"
-
-	v1 "github.com/hiromaily/connect-example/pkg/gen/greet/v1"
 )
 
 // This is a compile-time assertion to ensure that this generated file and the connect package are

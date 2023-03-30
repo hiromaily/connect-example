@@ -13,6 +13,8 @@ import (
 	"github.com/hiromaily/connect-example/pkg/logger"
 )
 
+// duplicated: must be removed
+
 type connectServer struct {
 	srv    *http.Server
 	logger logger.Logger

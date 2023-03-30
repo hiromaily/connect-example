@@ -3,6 +3,7 @@ run:
   build-tags:
     - integration
   skip-dirs:
+    - pkg/gen/*
     - proto
     - web
 

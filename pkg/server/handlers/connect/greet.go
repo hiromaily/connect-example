@@ -29,7 +29,7 @@ func NewGreetHandler(logger logger.Logger, ucGreet *greet.Greet) (string, http.H
 }
 
 func (g *GreetHandler) Greet(
-	ctx context.Context,
+	_ context.Context,
 	req *connect.Request[greetv1.GreetRequest],
 ) (*connect.Response[greetv1.GreetResponse], error) {
 	g.logger.Info("Greet()")

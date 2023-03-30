@@ -1,10 +1,13 @@
 package main
 
 import (
+	"log"
 	"net/http"
 	"os"
 	"time"
 
+	"github.com/semrush/zenrpc/v2"
+	"github.com/semrush/zenrpc/v2/testdata"
 	"golang.org/x/net/http2"
 	"golang.org/x/net/http2/h2c"
 
@@ -19,11 +22,11 @@ import (
 )
 
 type Registry interface {
-	NewServer() server.Server
+	NewConnectServer() server.Server
+	NewJSONRPCServer() server.Server
 }
 
 type registory struct {
-	mux       *http.ServeMux
 	logger    logger.Logger
 	ucGreet   *greet.Greet
 	ucEliza   *eliza.Eliza
@@ -33,15 +36,19 @@ type registory struct {
 
 func NewRegistory() Registry {
 	reg := &registory{}
-	reg.mux = http.NewServeMux()
 	reg.newLogger()
 
 	return reg
 }
 
-func (r *registory) NewServer() server.Server {
-	// switch server by DI
+func (r *registory) NewConnectServer() server.Server {
+	// switch server by DI or call another NewXXXServer()
 	return r.newConnectServer()
+}
+
+func (r *registory) NewJSONRPCServer() server.Server {
+	// switch server by DI or call another NewXXXServer()
+	return r.newJSONRPCServer()
 }
 
 func (r *registory) newLogger() logger.Logger {
@@ -83,7 +90,8 @@ func (r *registory) newElizaRepo() repositories.ElizaTableRepo {
 }
 
 func (r *registory) newConnectServer() server.Server {
-	r.createConnectHandlers()
+	mux := http.NewServeMux()
+	r.createConnectHandlers(mux)
 
 	addr := "localhost:8080"
 	if port := os.Getenv("PORT"); port != "" {
@@ -92,7 +100,7 @@ func (r *registory) newConnectServer() server.Server {
 	srv := &http.Server{
 		Addr: addr,
 		Handler: h2c.NewHandler(
-			cors.NewCORS().Handler(r.mux),
+			cors.NewCORS().Handler(mux),
 			&http2.Server{},
 		),
 		ReadHeaderTimeout: time.Second,
@@ -101,11 +109,43 @@ func (r *registory) newConnectServer() server.Server {
 		MaxHeaderBytes:    8 * 1024, // 8KiB
 	}
 
-	return server.NewConnectServer(srv, r.newLogger())
+	return server.NewServer(srv, r.newLogger())
 }
 
-func (r *registory) createConnectHandlers() {
+func (r *registory) newJSONRPCServer() server.Server {
+	mux := http.NewServeMux()
+	r.createJSONRPCHandlers(mux)
+
+	addr := "localhost:8090"
+	if port := os.Getenv("JSONRPC_PORT"); port != "" {
+		addr = ":" + port
+	}
+	// must be HTTP/1.1
+	srv := &http.Server{
+		Addr:              addr,
+		Handler:           cors.NewCORS().Handler(mux),
+		ReadHeaderTimeout: time.Second,
+		ReadTimeout:       5 * time.Minute,
+		WriteTimeout:      5 * time.Minute,
+		MaxHeaderBytes:    8 * 1024, // 8KiB
+	}
+
+	return server.NewServer(srv, r.newLogger())
+}
+
+func (r *registory) createConnectHandlers(mux *http.ServeMux) {
 	// params: path, handler
-	r.mux.Handle(connect2.NewGreetHandler(r.newLogger(), r.newUseCaseGreet()))
-	r.mux.Handle(connect2.NewElizaHandler(r.newLogger(), r.newUseCaseEliza()))
+	mux.Handle(connect2.NewGreetHandler(r.newLogger(), r.newUseCaseGreet()))
+	mux.Handle(connect2.NewElizaHandler(r.newLogger(), r.newUseCaseEliza()))
+	mux.Handle(connect2.NewJSONRPCHandler(r.newLogger(), r.newUseCaseGreet()))
+}
+
+func (r *registory) createJSONRPCHandlers(mux *http.ServeMux) {
+	rpc := zenrpc.NewServer(zenrpc.Options{ExposeSMD: true})
+	rpc.Register("arith", testdata.ArithService{})
+	rpc.Register("", testdata.ArithService{}) // public
+	//rpc.Register("arith", jsonrpc.ArithService{})
+	rpc.Use(zenrpc.Logger(log.New(os.Stderr, "", log.LstdFlags)))
+
+	mux.Handle("/", rpc)
 }
