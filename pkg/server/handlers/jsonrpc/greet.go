@@ -4,9 +4,11 @@ package jsonrpc
 
 import (
 	"context"
+
+	"github.com/semrush/zenrpc/v2"
+
 	"github.com/hiromaily/connect-example/pkg/logger"
 	"github.com/hiromaily/connect-example/pkg/usecases/greet"
-	"github.com/semrush/zenrpc/v2"
 )
 
 type GreetService struct {

@@ -2,15 +2,16 @@
 Example for go-connect server and connect-web client.
 
 This program follows a `Clean Architecture` as much as I can.
+For now, this runs connect-go server and JSON-RPC server which call same use-case.
 
 <img src="https://raw.githubusercontent.com/hiromaily/documents/main/images/clean-architecture3.png"  width="50%" height="50%">
 
 ## Environment Variables
-| Variables | Explanation      | Default           |
-|-----------|------------------|-------------------|
-| PORT      | gRPC server port | 8080              |
-| CONF      | config file path | ./config/dev.toml |
-
+| Variables    | Explanation          | Default           |
+|--------------|----------------------|-------------------|
+| PORT         | gRPC server port     | 8080              |
+| JSONRPC-PORT | JSON-RPC server port | 8090              |
+| CONF         | config file path     | ./config/dev.toml |
 
 ## Front-end
 [README](./web/README.md)

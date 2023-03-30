@@ -1,7 +1,6 @@
 package main
 
 import (
-	"github.com/hiromaily/connect-example/pkg/server/handlers/jsonrpc"
 	"net/http"
 	"os"
 	"time"
@@ -15,6 +14,7 @@ import (
 	"github.com/hiromaily/connect-example/pkg/server"
 	"github.com/hiromaily/connect-example/pkg/server/cors"
 	connect2 "github.com/hiromaily/connect-example/pkg/server/handlers/connect"
+	"github.com/hiromaily/connect-example/pkg/server/handlers/jsonrpc"
 	"github.com/hiromaily/connect-example/pkg/storages/mock"
 	"github.com/hiromaily/connect-example/pkg/usecases/eliza"
 	"github.com/hiromaily/connect-example/pkg/usecases/greet"
